@@ -62,7 +62,9 @@ const getRickAndMortyCharactersByPage = async (page) => {
 };
 
 module.exports = {
+  getRickAndMortySingleCharacter,
   getRickAndMortyCharactersByPage,
   getRickAndMortyConversation,
   PAGESIZE,
+  getRickAndMortyChatGPTConversationResult,
 };
