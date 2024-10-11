@@ -3,12 +3,14 @@ const axios = require("axios");
 const {
   getRickAndMortyCharactersByPage,
   getRickAndMortyConversation,
+  cosa,
 } = require("./utils.js");
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
+app.get("/", async (req, res) => {
+  const algo = await cosa();
+  res.send(JSON.stringify(algo));
 });
 
 const PORT = process.env.PORT || 3000;
