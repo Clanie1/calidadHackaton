@@ -1,13 +1,13 @@
 const axios = require("axios");
 const OpenAI = require("openai");
 const dotenv = require("dotenv");
-const { Client } = require("pg");
+const { Pool } = require("pg");
 
 dotenv.config();
 
 const PAGESIZE = 5;
 
-const client = new Client({
+const pool = new Pool({
   user: "postgres",
   password: "password",
   host: "localhost",
@@ -15,11 +15,11 @@ const client = new Client({
   database: "postgres",
 });
 
-client.connect();
+pool.connect();
 
 const getRickAndortyConversationCache = async (characterId1, characterId2) => {
   try {
-    const res = await client.query(
+    const res = await pool.query(
       "SELECT * FROM conversation WHERE character_id = $1 AND character2_id = $2",
       [characterId1, characterId2]
     );
@@ -36,8 +36,8 @@ const saveRickAndMortyConversation = async (
   conversation
 ) => {
   try {
-    const res = await client.query(
-      "INSERT INTO conversation (character_id, character2_id, text) VALUES ($1, $2, $3) RETURNING *",
+    const res = await pool.query(
+      "INSERT INTO conversation (character_id, character2_id, text) VALUES ($1, $2, $3) ON CONFLICT (character_id, character2_id) DO NOTHING RETURNING *",
       [characterId1, characterId2, conversation]
     );
     return res.rows[0];

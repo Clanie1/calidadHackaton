@@ -1,5 +1,9 @@
 const express = require("express");
 const axios = require("axios");
+const apicache = require("apicache");
+
+let cache = apicache.middleware;
+
 const {
   getRickAndMortyCharactersByPage,
   getRickAndMortyConversation,
@@ -7,6 +11,8 @@ const {
 } = require("./utils.js");
 
 const app = express();
+
+app.use(cache("5 minutes"));
 
 app.get("/", async (req, res) => {
   const algo = await cosa();
